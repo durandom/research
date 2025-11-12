@@ -1,0 +1,82 @@
+digraph G {
+    rankdir=TB;
+    node [shape=box, style=filled];
+    compound=true;
+
+    labelloc="t";
+    label="Microservices E-Commerce Platform";
+
+    // Client Layer
+    subgraph cluster_0 {
+        label="Client Layer";
+        style=filled;
+        color=lightgrey;
+
+        webapp [label="Web App", fillcolor="#e3f2fd"];
+        mobile [label="Mobile App", fillcolor="#e3f2fd"];
+    }
+
+    // API Layer
+    subgraph cluster_1 {
+        label="API Layer";
+        style=filled;
+        color=lightgrey;
+
+        gateway [label="API Gateway", fillcolor="#fff3e0"];
+        lb [label="Load Balancer", fillcolor="#fff3e0"];
+
+        gateway -> lb;
+    }
+
+    // Service Layer
+    subgraph cluster_2 {
+        label="Service Layer";
+        style=filled;
+        color=lightgrey;
+
+        user_svc [label="User Service", fillcolor="#f3e5f5"];
+        product_svc [label="Product Service", fillcolor="#f3e5f5"];
+        order_svc [label="Order Service", fillcolor="#f3e5f5"];
+        payment_svc [label="Payment Service", fillcolor="#f3e5f5"];
+    }
+
+    // Data Layer
+    subgraph cluster_3 {
+        label="Data Layer";
+        style=filled;
+        color=lightgrey;
+
+        user_db [label="User DB", fillcolor="#c8e6c9", shape=cylinder];
+        product_db [label="Product DB", fillcolor="#c8e6c9", shape=cylinder];
+        order_db [label="Order DB", fillcolor="#c8e6c9", shape=cylinder];
+    }
+
+    // Infrastructure
+    subgraph cluster_4 {
+        label="Infrastructure";
+        style=filled;
+        color=lightgrey;
+
+        mq [label="Message Queue", fillcolor="#e8f5e9"];
+        cache [label="Redis Cache", fillcolor="#e8f5e9"];
+    }
+
+    // Connections between layers
+    webapp -> gateway;
+    mobile -> gateway;
+
+    lb -> user_svc;
+    lb -> product_svc;
+    lb -> order_svc;
+    lb -> payment_svc;
+
+    user_svc -> user_db;
+    product_svc -> product_db;
+    order_svc -> order_db;
+
+    payment_svc -> mq;
+    order_svc -> mq;
+
+    user_svc -> cache;
+    product_svc -> cache;
+}

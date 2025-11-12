@@ -1,0 +1,198 @@
+# Complex Architecture - Cloud-Native Multi-Region Platform
+
+**Model Used:** Claude Sonnet 4.5 (claude-sonnet-4-5-20250929)
+
+**Description:** A sophisticated cloud-native platform with multi-region deployment, event-driven architecture, observability, and security components
+
+## PlantUML Diagram
+
+```plantuml
+@startuml
+!theme plain
+skinparam backgroundColor transparent
+scale 0.9
+
+title Cloud-Native Multi-Region Platform
+
+package "CDN & Edge" {
+  rectangle "CloudFront CDN" as cdn #ffcdd2
+  rectangle "WAF" as waf #ffcdd2
+}
+
+package "Region 1 - US-East" {
+  package "Ingress" {
+    rectangle "ALB" as alb1 #bbdefb
+    rectangle "API Gateway" as gw1 #bbdefb
+  }
+
+  package "Compute" {
+    rectangle "ECS Cluster" as ecs1 #d1c4e9
+    rectangle "Lambda" as lambda1 #d1c4e9
+    rectangle "Kubernetes" as k8s1 #d1c4e9
+  }
+
+  package "Data" {
+    database "Aurora" as rds1 #c8e6c9
+    database "DynamoDB" as dynamo1 #c8e6c9
+    storage "S3" as s3_1 #c8e6c9
+    database "ElasticSearch" as es1 #c8e6c9
+  }
+}
+
+package "Region 2 - EU-West" {
+  package "Ingress " as ingress2 {
+    rectangle "ALB" as alb2 #bbdefb
+    rectangle "API Gateway" as gw2 #bbdefb
+  }
+
+  package "Compute " as compute2 {
+    rectangle "ECS Cluster" as ecs2 #d1c4e9
+    rectangle "Lambda" as lambda2 #d1c4e9
+    rectangle "Kubernetes" as k8s2 #d1c4e9
+  }
+
+  package "Data " as data2 {
+    database "Aurora" as rds2 #c8e6c9
+    database "DynamoDB" as dynamo2 #c8e6c9
+    storage "S3" as s3_2 #c8e6c9
+    database "ElasticSearch" as es2 #c8e6c9
+  }
+}
+
+package "Event & Messaging" {
+  queue "SQS" as sqs #fff9c4
+  rectangle "SNS" as sns #fff9c4
+  rectangle "Kinesis" as kinesis #fff9c4
+  rectangle "EventBridge" as eventbridge #fff9c4
+}
+
+package "Observability" {
+  rectangle "CloudWatch" as cw #ffe0b2
+  rectangle "X-Ray" as xray #ffe0b2
+  rectangle "Grafana" as grafana #ffe0b2
+  rectangle "Prometheus" as prom #ffe0b2
+}
+
+package "Security" {
+  rectangle "Cognito" as cognito #f8bbd0
+  rectangle "IAM" as iam #f8bbd0
+  rectangle "Secrets Mgr" as secrets #f8bbd0
+  rectangle "KMS" as kms #f8bbd0
+}
+
+package "CI/CD" {
+  rectangle "CodePipeline" as pipeline #b2dfdb
+  rectangle "CodeBuild" as build #b2dfdb
+  rectangle "CodeDeploy" as deploy #b2dfdb
+}
+
+' CDN connections
+cdn --> waf
+waf --> alb1
+waf --> alb2
+
+' Region 1 flow
+alb1 --> gw1
+gw1 --> ecs1
+gw1 --> lambda1
+ecs1 --> k8s1
+k8s1 --> rds1
+k8s1 --> dynamo1
+k8s1 --> s3_1
+k8s1 --> es1
+
+' Region 2 flow
+alb2 --> gw2
+gw2 --> ecs2
+gw2 --> lambda2
+ecs2 --> k8s2
+k8s2 --> rds2
+k8s2 --> dynamo2
+k8s2 --> s3_2
+k8s2 --> es2
+
+' Cross-region replication
+rds1 .[#666].> rds2 : Replication
+s3_1 .[#666].> s3_2 : Replication
+dynamo1 .[#666].> dynamo2 : Global Tables
+
+' Event layer connections
+k8s1 --> sqs
+k8s2 --> sqs
+sqs --> sns
+sns --> kinesis
+kinesis --> eventbridge
+eventbridge --> lambda1
+eventbridge --> lambda2
+
+' Observability connections
+ecs1 --> cw
+ecs2 --> cw
+k8s1 --> xray
+k8s2 --> xray
+cw --> grafana
+k8s1 --> prom
+k8s2 --> prom
+prom --> grafana
+
+' Security connections
+gw1 --> cognito
+gw2 --> cognito
+k8s1 --> iam
+k8s2 --> iam
+k8s1 --> secrets
+k8s2 --> secrets
+secrets --> kms
+
+' CI/CD flow
+pipeline --> build
+build --> deploy
+deploy --> k8s1
+deploy --> k8s2
+
+@enduml
+```
+
+## Explanation
+
+This complex architecture demonstrates:
+
+### Multi-Region Deployment
+- Two active regions (US-East and EU-West) for high availability
+- Cross-region replication for data stores (Aurora, S3, DynamoDB Global Tables)
+
+### Edge & Security
+- CloudFront CDN for global content delivery
+- WAF for application security
+- Cognito for user authentication
+- IAM for access control
+- Secrets Manager with KMS for secrets encryption
+
+### Compute Layer
+- Multiple compute options: ECS, Lambda, Kubernetes
+- Application Load Balancers with API Gateway
+- Flexible workload distribution
+
+### Event-Driven Architecture
+- SQS for reliable queuing
+- SNS for pub/sub messaging
+- Kinesis for real-time data streaming
+- EventBridge for event routing
+- Lambda functions triggered by events
+
+### Data Layer
+- Aurora PostgreSQL with cross-region replication
+- DynamoDB Global Tables for low-latency access
+- S3 with cross-region replication
+- ElasticSearch for search and analytics
+
+### Observability
+- CloudWatch for monitoring and logging
+- X-Ray for distributed tracing
+- Prometheus for metrics collection
+- Grafana for visualization
+
+### CI/CD Pipeline
+- CodePipeline for workflow orchestration
+- CodeBuild for building artifacts
+- CodeDeploy for automated deployments to both regions
