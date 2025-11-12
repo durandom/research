@@ -1,0 +1,31 @@
+# Simple Architecture Diagram - Basic Web Application
+
+**Model Used:** Claude Sonnet 4.5 (claude-sonnet-4-5-20250929)
+
+**Description:** A basic three-tier web application architecture
+
+## PlantUML Diagram
+
+```plantuml
+@startuml
+!theme plain
+skinparam backgroundColor transparent
+skinparam defaultTextAlignment center
+
+title Basic Three-Tier Web Application
+
+rectangle "User Browser" as browser #e1f5ff
+rectangle "Web Server" as server #fff4e1
+database "Database" as db #ffe1f5
+
+browser --> server
+server --> db
+
+@enduml
+```
+
+## Explanation
+- Simple three-tier architecture
+- User interface connects to web server
+- Web server connects to database
+- Color-coded for visual clarity

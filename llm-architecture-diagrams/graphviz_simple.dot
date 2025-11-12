@@ -1,0 +1,17 @@
+digraph G {
+    rankdir=TB;
+    node [shape=box, style=filled];
+
+    // Title
+    labelloc="t";
+    label="Basic Three-Tier Web Application";
+
+    // Nodes
+    browser [label="User Browser", fillcolor="#e1f5ff"];
+    webserver [label="Web Server", fillcolor="#fff4e1"];
+    database [label="Database", fillcolor="#ffe1f5", shape=cylinder];
+
+    // Edges
+    browser -> webserver;
+    webserver -> database;
+}

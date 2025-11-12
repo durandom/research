@@ -1,0 +1,73 @@
+# Medium Complexity - Microservices E-Commerce Platform
+
+**Model Used:** Claude Sonnet 4.5 (claude-sonnet-4-5-20250929)
+
+**Description:** A microservices-based e-commerce platform with API gateway, multiple services, and message queue
+
+## PlantUML Diagram
+
+```plantuml
+@startuml
+!theme plain
+skinparam backgroundColor transparent
+
+title Microservices E-Commerce Platform
+
+package "Client Layer" {
+  rectangle "Web App" as webapp #e3f2fd
+  rectangle "Mobile App" as mobile #e3f2fd
+}
+
+package "API Layer" {
+  rectangle "API Gateway" as gateway #fff3e0
+  rectangle "Load Balancer" as lb #fff3e0
+}
+
+package "Service Layer" {
+  rectangle "User Service" as user_svc #f3e5f5
+  rectangle "Product Service" as product_svc #f3e5f5
+  rectangle "Order Service" as order_svc #f3e5f5
+  rectangle "Payment Service" as payment_svc #f3e5f5
+}
+
+package "Data Layer" {
+  database "User DB" as user_db #c8e6c9
+  database "Product DB" as product_db #c8e6c9
+  database "Order DB" as order_db #c8e6c9
+}
+
+package "Infrastructure" {
+  queue "Message Queue" as mq #e8f5e9
+  rectangle "Redis Cache" as cache #e8f5e9
+}
+
+webapp --> gateway
+mobile --> gateway
+
+gateway --> lb
+
+lb --> user_svc
+lb --> product_svc
+lb --> order_svc
+lb --> payment_svc
+
+user_svc --> user_db
+product_svc --> product_db
+order_svc --> order_db
+
+payment_svc --> mq
+order_svc --> mq
+
+user_svc --> cache
+product_svc --> cache
+
+@enduml
+```
+
+## Explanation
+- Multiple client types (web and mobile)
+- API Gateway pattern with load balancing
+- Four microservices: User, Product, Order, Payment
+- Each service has its own database (database per service pattern)
+- Message queue for asynchronous communication
+- Redis cache for performance optimization
