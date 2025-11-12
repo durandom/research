@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Simple Architecture Diagram - Basic Web Application -->
+<!-- Model Used: Claude Sonnet 4.5 (claude-sonnet-4-5-20250929) -->
+<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .box { fill: #e1f5ff; stroke: #0277bd; stroke-width: 2; }
+      .server { fill: #fff4e1; stroke: #f57c00; stroke-width: 2; }
+      .db { fill: #ffe1f5; stroke: #c2185b; stroke-width: 2; }
+      .text { font-family: Arial, sans-serif; font-size: 14px; text-anchor: middle; }
+      .arrow { stroke: #333; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#333" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="300" y="30" class="text" font-size="18" font-weight="bold">Basic Three-Tier Web Application</text>
+
+  <!-- User Browser -->
+  <rect x="225" y="80" width="150" height="60" rx="5" class="box"/>
+  <text x="300" y="115" class="text">User Browser</text>
+
+  <!-- Web Server -->
+  <rect x="225" y="200" width="150" height="60" rx="5" class="server"/>
+  <text x="300" y="235" class="text">Web Server</text>
+
+  <!-- Database -->
+  <rect x="225" y="320" width="150" height="60" rx="5" class="db"/>
+  <text x="300" y="355" class="text">Database</text>
+
+  <!-- Arrows -->
+  <path d="M 300 140 L 300 200" class="arrow"/>
+  <path d="M 300 260 L 300 320" class="arrow"/>
+</svg>
